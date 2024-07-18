@@ -16,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+    
         $data = Category::query()->latest('id')->paginate(5);
         return view(self::PATH_VIEW.__FUNCTION__, compact('data'));
     }
@@ -27,7 +27,6 @@ class CategoryController extends Controller
     public function create()
     {
         return view(self::PATH_VIEW.__FUNCTION__);
-        //
     }
 
     /**
@@ -46,7 +45,6 @@ class CategoryController extends Controller
         // dd($data);
         Category::query()->create($data);
         return redirect()->route('admin.categories.index');
-        // return view('admin.categories.show', compact('category'));
     }
 
     /**
@@ -54,7 +52,6 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        // $category = Category::find($category);
         // dd($category);
         return view('admin.categories.show', compact('category'));
     }
@@ -74,16 +71,18 @@ class CategoryController extends Controller
     {
         $data = $request->except('cover');
         $data['is_active'] = isset($data['is_active']) ?1 :0;
+
         if ($request->hasFile('cover')) {
             $data['cover'] = Storage::put(self::PATH_UPLOAD, $request->file('cover'));
-            //co upload nah moi 
+            //co upload anh moi 
             if(!empty($category->cover) && Storage::existss($category->cover)){
                 Storage::delete($category->cover);
             }
         }else{
-            //k upload anh moi thi lay gia tr   i anh cu
+            //k upload anh moi thi lay gia tri anh cu
             $data['cover'] = $category->cover;
         }
+
         // dd($data);
         $category->update($data);
         return redirect()->route('admin.categories.index')->with('message','cap nhat thanh cong');        // return view('admin.categories.show', compact('category'));
@@ -94,7 +93,6 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
         $category->delete();
         return back()->with('message', 'xoa thanh cong');
     }
